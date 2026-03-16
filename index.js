@@ -531,6 +531,8 @@ app.post('/api/mark-attendance', async (req, res) => {
         const attendanceDate = now.toLocaleDateString('en-CA', options);
         const currentTimeAMPM = now.toLocaleTimeString('en-US', { ...options, hour: '2-digit', minute: '2-digit', hour12: true });
 
+        console.log(`[ATTENDANCE] PIN: ${pin}, Type: ${type}, Time: ${currentTimeAMPM}, Date: ${attendanceDate}`);
+
         let excelStatus = 'P'; // Default status for Excel
         let shouldUpdateExcel = false; // Only update Excel in certain cases
         let responseMsg = `Attendance (${type.toUpperCase()}) marked successfully!`;
@@ -542,6 +544,7 @@ app.post('/api/mark-attendance', async (req, res) => {
                 ON DUPLICATE KEY UPDATE in_time = ?, topic = ?
             `;
             await Db.promise().query(inSql, [student.sid, attendanceDate, currentTimeAMPM, topic, currentTimeAMPM, topic]);
+            console.log(`[ATTENDANCE] IN-punch recorded for student ${student.sid}`);
             
             shouldUpdateExcel = true;
             excelStatus = 'P';
@@ -555,33 +558,48 @@ app.post('/api/mark-attendance', async (req, res) => {
 
             if (fetchResults.length > 0 && fetchResults[0].in_time) {
                 const inTimeString = fetchResults[0].in_time;
-                const [timePart, modifier] = inTimeString.split(' ');
-                let [hours, minutes] = timePart.split(':');
-                let h = parseInt(hours, 10);
-                if (modifier === 'PM' && h < 12) h += 12;
-                if (modifier === 'AM' && h === 12) h = 0;
+                
+                // Helper to parse "HH:mm AM/PM" to total minutes in the day
+                // Enhanced with regex to handle different spaces (\s+) and case-insensitivity
+                const parseToMinutes = (timeStr) => {
+                    if (!timeStr) return 0;
+                    const parts = timeStr.trim().split(/\s+/);
+                    if (parts.length < 2) return 0;
+                    
+                    const timePart = parts[0];
+                    const modifier = parts[1].toUpperCase().replace(/\./g, ''); // Handles PM, pm, P.M. etc.
+                    
+                    let [hours, minutes] = timePart.split(':').map(val => parseInt(val, 10));
+                    if (modifier === 'PM' && hours < 12) hours += 12;
+                    if (modifier === 'AM' && hours === 12) hours = 0;
+                    return hours * 60 + (minutes || 0);
+                };
 
-                const inTimeDate = new Date(now);
-                inTimeDate.setHours(h, parseInt(minutes, 10), 0, 0);
+                const inMins = parseToMinutes(inTimeString);
+                const outMins = parseToMinutes(currentTimeAMPM);
+                
+                const diffMins = outMins - inMins;
+                console.log(`[ATTENDANCE] CALC: In=${inTimeString}(${inMins}), Out=${currentTimeAMPM}(${outMins}), Diff=${diffMins} mins`);
 
-                const diffMs = now - inTimeDate;
-                const twelveHoursMs = 12 * 60 * 60 * 1000;
-
-                if (diffMs > twelveHoursMs) {
+                if (diffMins > 720 || diffMins < 0) {
                     finalTotalHours = "N/A";
                     finalTopic = "......";
                     excelStatus = "A"; 
                     shouldUpdateExcel = true; // Overwrite 'P' with 'A'
-                    responseMsg = "Out time recorded, but duration exceeded 12h. Marked as Absent.";
+                    responseMsg = diffMins < 0 
+                        ? `Out-punch recorded at ${currentTimeAMPM}, but In-punch was at ${inTimeString}. Duration cannot be negative. Marked as Absent.` 
+                        : "Out time recorded, but duration exceeded 12h. Marked as Absent.";
+                    console.warn(`[ATTENDANCE] WARNING: ${responseMsg}`);
                 } else {
-                    const diffMins = Math.floor(diffMs / (1000 * 60));
                     const hh = Math.floor(diffMins / 60).toString().padStart(2, '0');
                     const mm = (diffMins % 60).toString().padStart(2, '0');
                     finalTotalHours = `${hh}:${mm}`;
                     shouldUpdateExcel = false; // Already marked 'P' at IN
+                    console.log(`[ATTENDANCE] Duration calculated: ${finalTotalHours}`);
                 }
             } else {
                 // No IN time, but they are punching OUT
+                console.warn(`[ATTENDANCE] No IN-punch found for PIN ${pin} on ${attendanceDate}`);
                 excelStatus = "A";
                 finalTotalHours = "N/A";
                 finalTopic = topic; // Store the actual topic they entered
@@ -598,6 +616,7 @@ app.post('/api/mark-attendance', async (req, res) => {
                 student.sid, attendanceDate, currentTimeAMPM, finalTotalHours, finalTopic,
                 currentTimeAMPM, finalTotalHours, finalTopic
             ]);
+            console.log(`[ATTENDANCE] OUT-punch finalized for student ${student.sid} with total_hours: ${finalTotalHours}`);
         }
 
         // --- 2. UPDATE BATCH-WISE PERSISTENT ATTENDANCE (Excel) ---
