@@ -316,7 +316,7 @@ export const submitExam = async (req, res) => {
 
         // Calculate score
         let correctAnswers = 0;
-        const totalQuestions = questions.length;
+        const totalQuestions = studentAnswers.length;
 
         // Map correct answers for quick lookup
         const answersMap = {};
