@@ -15,8 +15,8 @@ import attendanceRoutes from './routes/attendanceRoutes.js';
 import settingsRoutes from './routes/settingsRoutes.js';
 import studentRoutes from './routes/studentRoutes.js';
 import examRoutes from './routes/examRoutes.js';
-import ipSettingsRoutes from './routes/ipSettingsRoutes.js'; // <-- NEW IP SETTINGS ROUTES
-import createIpSettingsTable from './models/ipSettingsModel.js'; // <-- NEW MODEL INITIALIZER
+import locationSettingsRoutes from './routes/locationSettingsRoutes.js'; // <-- NEW LOCATION SETTINGS ROUTES
+import createLocationSettingsTable from './models/locationSettingsModel.js'; // <-- NEW MODEL INITIALIZER
 import emailSettingsRoutes from './routes/emailSettingsRoutes.js';
 import createEmailSettingsTable from './models/emailSettingsModel.js';
 import { adminLogin } from './controllers/authController.js';
@@ -34,7 +34,7 @@ app.use(express.json());
 app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
 createTables();
-createIpSettingsTable(); // <-- INITIALIZE NEW TABLE
+createLocationSettingsTable(); // <-- INITIALIZE NEW TABLE
 createEmailSettingsTable();
 
 // Auth Route
@@ -154,7 +154,7 @@ app.use('/api/admin/attendance', attendanceRoutes);
 app.use('/api/admin/settings', settingsRoutes);
 app.use('/api/admin', adminRoutes);
 
-app.use('/api/ip-settings', ipSettingsRoutes); // <-- REGISTER BRAND NEW ROUTES
+app.use('/api/location-settings', locationSettingsRoutes); // <-- REGISTER BRAND NEW ROUTES
 app.use('/api/email-settings', emailSettingsRoutes);
 
 // Use Exam Routes
@@ -436,10 +436,12 @@ app.get('/api/student-face/:pin', async (req, res) => {
 
         let hasIn = false;
         let hasOut = false;
+        let inTime = null;
 
         if (attResults.length > 0) {
             hasIn = !!attResults[0].in_time;
             hasOut = !!attResults[0].out_time;
+            inTime = attResults[0].in_time;
         }
 
         res.json({
@@ -448,7 +450,8 @@ app.get('/api/student-face/:pin', async (req, res) => {
             faceData: JSON.parse(student.face_descriptor),
             status: student.status,
             hasIn,
-            hasOut
+            hasOut,
+            inTime
         });
 
     } catch (err) {
@@ -589,6 +592,11 @@ app.post('/api/mark-attendance', async (req, res) => {
                 
                 const diffMins = outMins - inMins;
                 console.log(`[ATTENDANCE] CALC: In=${inTimeString}(${inMins}), Out=${currentTimeAMPM}(${outMins}), Diff=${diffMins} mins`);
+
+                if (diffMins < 120 && diffMins >= 0) {
+                    const remaining = 120 - diffMins;
+                    return res.status(400).json({ error: `You can only mark OUT after 2 hours. Remaining time: ${remaining} minutes.` });
+                }
 
                 if (diffMins > 720 || diffMins < 0) {
                     finalTotalHours = "N/A";

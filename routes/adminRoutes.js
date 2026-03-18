@@ -7,7 +7,8 @@ import {
     getAllStudents,
     getStudentById,
     updateStudent,
-    getAllCourses
+    getAllCourses,
+    getDashboardStats
 } from '../controllers/adminController.js';
 import { changePassword } from '../controllers/authController.js';
 
@@ -20,6 +21,9 @@ router.post('/change-password', changePassword);
 
 // GET: /api/admin/pending-verifications
 router.get('/pending-verifications', getPendingStudents);
+
+// GET: /api/admin/dashboard-stats
+router.get('/dashboard-stats', getDashboardStats);
 
 // POST: /api/admin/approve-student
 router.post('/approve-student', approveStudent);

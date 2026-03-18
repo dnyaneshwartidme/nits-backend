@@ -461,3 +461,37 @@ export const getAllCourses = (req, res) => {
         res.json(results);
     });
 };
+
+// 5. Dashboard Summary Stats
+export const getDashboardStats = (req, res) => {
+    const queries = {
+        totalStudents: "SELECT COUNT(*) as count FROM student",
+        pendingApprovals: "SELECT COUNT(*) as count FROM student_auth WHERE status = 'PENDING'",
+        todayAttendance: "SELECT COUNT(DISTINCT sid) as count FROM attendance_log WHERE attendance_date = CURDATE()",
+        totalSubjects: "SELECT COUNT(*) as count FROM subjects",
+        totalCourses: "SELECT COUNT(*) as count FROM course"
+    };
+
+    let stats = {};
+    let pendingQueries = Object.keys(queries).length;
+    let hasError = false;
+
+    for (let key in queries) {
+        Db.query(queries[key], (err, results) => {
+            if (err) {
+                if (!hasError) {
+                    hasError = true;
+                    console.error("Dashboard Stats Error:", err);
+                    return res.status(500).json({ error: "Failed to fetch dashboard stats" });
+                }
+                return;
+            }
+            stats[key] = results[0].count || 0;
+            pendingQueries--;
+
+            if (pendingQueries === 0 && !hasError) {
+                res.json(stats);
+            }
+        });
+    }
+};
