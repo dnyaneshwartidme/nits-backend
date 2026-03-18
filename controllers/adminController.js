@@ -2,6 +2,7 @@ import Db from '../config/db.js';
 import ExcelJS from 'exceljs';
 import path from 'path';
 import fs from 'fs';
+import nodemailer from 'nodemailer';
 
 // Get list of pending students who have registered but have not been verified
 export const getPendingStudents = (req, res) => {
@@ -60,9 +61,9 @@ export const approveStudent = (req, res) => {
             // IMPORTANT: Synchronize enrollment_date to approval date for accurate Excel tracking
             Db.query("UPDATE enrollment SET enrollment_date = CURDATE() WHERE sid = ?", [studentId]);
 
-            // Fetch student data to save in Excel (Name, Type/Course, Branch/Domain)
+            // Fetch student data to save in Excel (Name, Type/Course, Branch/Domain) AND email for sending
             const fetchSql = `
-                SELECT s.full_name, c.course_name, e.type 
+                SELECT s.full_name, s.email, c.course_name, e.type 
                 FROM student s 
                 LEFT JOIN enrollment e ON s.sid = e.sid 
                 LEFT JOIN course c ON e.cid = c.cid
@@ -87,7 +88,85 @@ export const approveStudent = (req, res) => {
                     const excelFileName = `${month}_${year}.xlsx`;
                     Db.query("UPDATE enrollment SET exal_file = ? WHERE sid = ?", [excelFileName, studentId]);
 
-                    return res.json({ message: "Student Approved & Excel Updated!", pin: pin });
+                    // --- SEND EMAIL NOTIFICATION ---
+                    const emailQuery = "SELECT smtp_email, smtp_password FROM email_settings WHERE id = 1 AND smtp_email != '' AND smtp_password != ''";
+                    Db.query(emailQuery, (emailErr, emailRes) => {
+                        if (emailErr || emailRes.length === 0) {
+                            return res.json({ message: "Student Approved & Excel Updated! (Email config missing, so no email sent)", pin: pin });
+                        }
+
+                        const { smtp_email, smtp_password } = emailRes[0];
+                        const studentEmail = studentData.email; // we need to make sure we queried email earlier
+
+                        if (!studentEmail) {
+                             return res.json({ message: "Student Approved & Excel Updated! (Student has no email address)", pin: pin });
+                        }
+
+                        // Set up Nodemailer
+                        const transporter = nodemailer.createTransport({
+                            service: 'gmail', // Assuming gmail based on the frontend instructions
+                            auth: {
+                                user: smtp_email,
+                                pass: smtp_password
+                            }
+                        });
+
+                        const mailOptions = {
+                            from: `"NITS Academy" <${smtp_email}>`,
+                            to: studentEmail,
+                            subject: 'Registration Approved - Welcome to NITS Academy!',
+                            html: `
+                                <div style="font-family: Arial, sans-serif; padding: 20px; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 8px;">
+                                    <h2 style="color: #1a237e; border-bottom: 2px solid #ebf8ff; padding-bottom: 10px;">Registration Approved</h2>
+                                    
+                                    <p>Dear <strong>${studentName}</strong>,</p>
+                                    <p>Your registration at NITS Academy has been successfully approved.</p>
+                                    
+                                    <div style="background-color: #f8f9fa; padding: 15px; border-left: 4px solid #3b82f6; margin: 20px 0;">
+                                        <p style="margin: 5px 0;"><strong>Course / Type:</strong> ${courseType}</p>
+                                        <p style="margin: 5px 0;"><strong>Domain:</strong> ${domain}</p>
+                                        <br/>
+                                        <h3 style="margin-top: 10px; color: #1e293b;">Your Unique Login PIN</h3>
+                                        <div style="font-size: 2em; letter-spacing: 5px; color: #d97706; font-weight: bold; padding: 10px; background: #fff; border: 1px dashed #cbd5e1; display: inline-block;">
+                                            ${pin}
+                                        </div>
+                                    </div>
+
+                                    <h3 style="color: #1a237e; margin-top: 25px;">Important Notes:</h3>
+                                    <ul style="line-height: 1.6;">
+                                        <li>You must use this 6-digit PIN to mark your daily attendance on the lab scanner.</li>
+                                        <li>You can view your portfolio and attendance records.</li>
+                                        <li>You can attempt assigned exams using this PIN.</li>
+                                    </ul>
+
+                                    <div style="margin-top: 25px;">
+                                        <a href="${process.env.FRONTEND_URL || 'http://localhost:5173'}/student/login" 
+                                           style="background-color: #3b82f6; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">
+                                           Go to Student Login
+                                        </a>
+                                    </div>
+
+                                    <div style="margin-top: 30px; padding: 15px; background-color: #fee2e2; border-left: 4px solid #ef4444; color: #991b1b;">
+                                        <strong>⚠️ Warning:</strong> Please do not share this PIN or your code with anyone. It is for your personal access only.
+                                    </div>
+
+                                    <p style="margin-top: 30px; font-size: 0.9em; color: #64748b;">
+                                        Best Regards,<br/><strong>NITS Academy Admin Team</strong>
+                                    </p>
+                                </div>
+                            `
+                        };
+
+                        transporter.sendMail(mailOptions, (error, info) => {
+                            if (error) {
+                                console.error('Error sending approval email:', error);
+                                return res.json({ message: "Student Approved, but failed to send email notification.", pin: pin });
+                            } else {
+                                console.log('Email sent: ' + info.response);
+                                return res.json({ message: "Student Approved! Success email sent to student.", pin: pin });
+                            }
+                        });
+                    });
 
                 } catch (excelError) {
                     console.error("Excel update Error:", excelError);

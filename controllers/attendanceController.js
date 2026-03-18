@@ -37,7 +37,8 @@ export const getAllAttendance = (req, res) => {
         queryParams.push(course_id);
     }
 
-    query += ` ORDER BY al.attendance_date DESC, s.full_name ASC`;
+    // Sort by Date (newest first) then by Time (newest punch first) then by Name
+    query += ` ORDER BY al.attendance_date DESC, al.in_time DESC, s.full_name ASC`;
 
     Db.query(query, queryParams, (err, results) => {
         if (err) {
@@ -69,7 +70,8 @@ export const downloadAttendanceExcel = async (req, res) => {
     if (type && type !== 'all') { query += ` AND e.type = ?`; queryParams.push(type); }
     if (course_id && course_id !== 'all') { query += ` AND e.cid = ?`; queryParams.push(course_id); }
 
-    query += ` ORDER BY al.attendance_date DESC, s.full_name ASC`;
+    // Sort Excel the same way
+    query += ` ORDER BY al.attendance_date DESC, al.in_time DESC, s.full_name ASC`;
 
     Db.query(query, queryParams, async (err, results) => {
         if (err) return res.status(500).json({ error: "Excel generation failed" });

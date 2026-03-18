@@ -15,6 +15,10 @@ import attendanceRoutes from './routes/attendanceRoutes.js';
 import settingsRoutes from './routes/settingsRoutes.js';
 import studentRoutes from './routes/studentRoutes.js';
 import examRoutes from './routes/examRoutes.js';
+import ipSettingsRoutes from './routes/ipSettingsRoutes.js'; // <-- NEW IP SETTINGS ROUTES
+import createIpSettingsTable from './models/ipSettingsModel.js'; // <-- NEW MODEL INITIALIZER
+import emailSettingsRoutes from './routes/emailSettingsRoutes.js';
+import createEmailSettingsTable from './models/emailSettingsModel.js';
 import { adminLogin } from './controllers/authController.js';
 
 // Secret used exclusively for short-lived QR access tokens.
@@ -30,6 +34,8 @@ app.use(express.json());
 app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
 createTables();
+createIpSettingsTable(); // <-- INITIALIZE NEW TABLE
+createEmailSettingsTable();
 
 // Auth Route
 app.post('/api/admin/login', adminLogin);
@@ -147,6 +153,9 @@ const upload = multer({ storage: storage });
 app.use('/api/admin/attendance', attendanceRoutes);
 app.use('/api/admin/settings', settingsRoutes);
 app.use('/api/admin', adminRoutes);
+
+app.use('/api/ip-settings', ipSettingsRoutes); // <-- REGISTER BRAND NEW ROUTES
+app.use('/api/email-settings', emailSettingsRoutes);
 
 // Use Exam Routes
 app.use('/api/exam', examRoutes);

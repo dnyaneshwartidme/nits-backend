@@ -3,10 +3,10 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Mar 16, 2026 at 10:44 AM
+-- Generation Time: Mar 18, 2026 at 06:56 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
-SET SESSION sql_require_primary_key = OFF;
+
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
@@ -39,7 +39,7 @@ CREATE TABLE `admin_users` (
 --
 
 INSERT INTO `admin_users` (`aid`, `username`, `password`, `created_at`) VALUES
-(1, 'admin', '$2a$10$0yw/qWCJHSOrAU/LjWEphOidzAfLTdx.wVG7mrlrhWUQtFP80ZflC', '2026-03-11 07:01:14');
+(1, 'admin', '$2a$10$hjg/XKgdYO2a5a3tEcqcNuCDNGG68cMX.Vi4yVMlA0D8MMAra/8Tq', '2026-03-11 07:01:14');
 
 -- --------------------------------------------------------
 
@@ -57,18 +57,6 @@ CREATE TABLE `attendance_log` (
   `topic` text DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `attendance_log`
---
-
-INSERT INTO `attendance_log` (`log_id`, `sid`, `attendance_date`, `in_time`, `out_time`, `total_hours`, `topic`, `created_at`) VALUES
-(30, 25, '2026-03-11', '06:52 PM', NULL, NULL, '', '2026-03-11 13:22:22'),
-(31, 25, '2026-03-12', '10:25 AM', NULL, NULL, '', '2026-03-12 04:55:44'),
-(32, 26, '2026-03-13', '02:14 PM', '02:14 PM', '00:00', 'i am Dnyaneshwaqr', '2026-03-13 08:44:02'),
-(34, 25, '2026-03-13', '05:27 PM', '05:35 PM', '00:08', ' Hello Ji,  \nI am a full-stack developer.', '2026-03-13 11:57:38'),
-(36, 25, '2026-03-15', '08:58 AM', NULL, NULL, '', '2026-03-15 03:28:28'),
-(37, 25, '2026-03-16', '02:12 PM', NULL, NULL, '', '2026-03-16 08:42:12');
 
 -- --------------------------------------------------------
 
@@ -151,6 +139,25 @@ INSERT INTO `course` (`cid`, `course_id`, `course_name`, `duration`, `sr_no`) VA
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `email_settings`
+--
+
+CREATE TABLE `email_settings` (
+  `id` int(11) NOT NULL,
+  `smtp_email` varchar(255) DEFAULT '',
+  `smtp_password` varchar(255) DEFAULT ''
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `email_settings`
+--
+
+INSERT INTO `email_settings` (`id`, `smtp_email`, `smtp_password`) VALUES
+(1, 'tidmednyaneshwar@gmail.com', 'kzaqiicofvtqzdkj');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `enrollment`
 --
 
@@ -171,8 +178,7 @@ CREATE TABLE `enrollment` (
 --
 
 INSERT INTO `enrollment` (`eid`, `sid`, `cid`, `iid`, `type`, `status`, `enrollment_date`, `certificate_no`, `exal_file`) VALUES
-(25, 25, 1, 1, 'internship', 'active', '2026-03-11', 'NITS/IS/45/260311/0025', 'March_2026.xlsx'),
-(26, 26, 2, 1, 'internship', 'active', '2026-03-13', 'NITS/IS/45/260313/0026', 'March_2026.xlsx');
+(27, 27, 1, 2, 'internship', 'active', '2026-03-18', 'NITS/IS/3/260318/0027', 'March_2026.xlsx');
 
 -- --------------------------------------------------------
 
@@ -201,7 +207,157 @@ INSERT INTO `exam_questions` (`qid`, `subject_id`, `question_text`, `option_a`, 
 (2, 1, 'Which concept is NOT part of React?', 'Components', 'States', 'Props', 'Tables', 'D', '2026-03-14 05:03:32'),
 (3, 1, 'What is JSX?', 'JavaScript XML', 'Java Syntax Extension', 'JSON X', 'JavaScript X-Factor', 'A', '2026-03-14 05:31:44'),
 (4, 2, 'What does HTML stand for?', 'Hyper Text Markup Language', 'Home Tool Markup Language', 'Hyperlinks Text Mark Language', 'Hex Text Markup Language', 'A', '2026-03-14 05:03:32'),
-(5, 2, 'Which HTML tag is used to define an internal style sheet?', '<script>', '<css>', '<style>', '<design>', 'C', '2026-03-14 05:03:32');
+(5, 2, 'Which HTML tag is used to define an internal style sheet?', '<script>', '<css>', '<style>', '<design>', 'C', '2026-03-14 05:03:32'),
+(6, 2, 'What does CSS stand for?', 'Cascading Style Sheets', 'Creative Style System', 'Computer Style Sheet', 'Colorful Style Sheets', 'A', '2026-03-18 05:48:21'),
+(7, 2, 'Which HTML tag is used to create a hyperlink?', '<a>', '<link>', '<href>', '<url>', 'A', '2026-03-18 05:48:21'),
+(8, 2, 'Which CSS property controls text size?', 'font-style', 'text-size', 'font-size', 'text-style', 'C', '2026-03-18 05:48:21'),
+(9, 2, 'Which HTML tag is used for images?', '<img>', '<image>', '<pic>', '<src>', 'A', '2026-03-18 05:48:21'),
+(10, 2, 'Which attribute is used to provide an alternate text for an image?', 'title', 'alt', 'src', 'href', 'B', '2026-03-18 05:48:21'),
+(11, 2, 'Which HTML element is used for the largest heading?', '<h6>', '<heading>', '<h1>', '<head>', 'C', '2026-03-18 05:48:21'),
+(12, 2, 'Which CSS property changes background color?', 'color', 'bgcolor', 'background-color', 'background', 'C', '2026-03-18 05:48:21'),
+(13, 2, 'Which HTML tag is used to define a table?', '<table>', '<tab>', '<tr>', '<td>', 'A', '2026-03-18 05:48:21'),
+(14, 2, 'Which CSS property is used to change text color?', 'text-color', 'color', 'font-color', 'text-style', 'B', '2026-03-18 05:48:21'),
+(15, 2, 'Which HTML tag is used to create a line break?', '<br>', '<break>', '<lb>', '<newline>', 'A', '2026-03-18 05:48:21'),
+(16, 2, 'Which CSS property controls the space between elements?', 'spacing', 'margin', 'padding', 'border', 'B', '2026-03-18 05:48:21'),
+(17, 2, 'Which HTML tag is used to define a paragraph?', '<p>', '<para>', '<text>', '<pg>', 'A', '2026-03-18 05:48:21'),
+(18, 2, 'Which CSS property is used for bold text?', 'font-weight', 'text-bold', 'bold', 'weight', 'A', '2026-03-18 05:48:21'),
+(19, 2, 'Which HTML attribute specifies a unique id?', 'class', 'id', 'name', 'key', 'B', '2026-03-18 05:48:21'),
+(20, 2, 'Which CSS property sets the font type?', 'font-family', 'font-style', 'font-type', 'text-font', 'A', '2026-03-18 05:48:21'),
+(21, 2, 'Which HTML tag is used to create an ordered list?', '<ol>', '<ul>', '<li>', '<list>', 'A', '2026-03-18 05:48:21'),
+(22, 2, 'Which CSS property controls element width?', 'size', 'width', 'length', 'dimension', 'B', '2026-03-18 05:48:21'),
+(23, 2, 'Which HTML tag is used to create a form?', '<form>', '<input>', '<submit>', '<button>', 'A', '2026-03-18 05:48:21'),
+(24, 2, 'Which CSS property is used for borders?', 'border', 'outline', 'frame', 'line', 'A', '2026-03-18 05:48:21'),
+(25, 2, 'Which HTML tag is used for table rows?', '<tr>', '<td>', '<th>', '<row>', 'A', '2026-03-18 05:48:21'),
+(26, 2, 'Which CSS property controls padding?', 'margin', 'spacing', 'padding', 'gap', 'C', '2026-03-18 05:48:21'),
+(27, 2, 'Which HTML tag is used for list items?', '<li>', '<ul>', '<ol>', '<item>', 'A', '2026-03-18 05:48:21'),
+(28, 2, 'Which CSS property makes text italic?', 'font-style', 'italic', 'text-style', 'style', 'A', '2026-03-18 05:48:21'),
+(29, 2, 'Which HTML tag is used to define metadata?', '<meta>', '<data>', '<info>', '<head>', 'A', '2026-03-18 05:48:21'),
+(30, 2, 'Which CSS property sets background image?', 'background-img', 'bg-image', 'background-image', 'image-bg', 'C', '2026-03-18 05:48:21'),
+(31, 2, 'Which HTML tag is used to embed video?', '<video>', '<media>', '<movie>', '<vid>', 'A', '2026-03-18 05:48:21'),
+(32, 2, 'Which CSS property controls display type?', 'display', 'visibility', 'show', 'view', 'A', '2026-03-18 05:48:21'),
+(33, 2, 'Which HTML tag is used for input field?', '<input>', '<form>', '<text>', '<field>', 'A', '2026-03-18 05:48:21'),
+(34, 2, 'Which CSS property controls position?', 'position', 'align', 'place', 'float', 'A', '2026-03-18 05:48:21'),
+(35, 2, 'Which HTML tag defines navigation links?', '<nav>', '<menu>', '<links>', '<navigate>', 'A', '2026-03-18 05:48:21'),
+(36, 2, 'Which CSS property controls overflow?', 'overflow', 'scroll', 'hidden', 'clip', 'A', '2026-03-18 05:48:21'),
+(37, 2, 'Which HTML tag is used for footer?', '<footer>', '<bottom>', '<end>', '<foot>', 'A', '2026-03-18 05:48:21'),
+(38, 2, 'Which CSS property aligns text?', 'align', 'text-align', 'font-align', 'justify', 'B', '2026-03-18 05:48:21'),
+(39, 2, 'Which HTML tag is used for header?', '<header>', '<top>', '<head>', '<title>', 'A', '2026-03-18 05:48:21'),
+(40, 2, 'Which CSS property controls visibility?', 'display', 'visibility', 'show', 'view', 'B', '2026-03-18 05:48:21'),
+(41, 2, 'Which HTML tag is used for division?', '<div>', '<section>', '<span>', '<box>', 'A', '2026-03-18 05:48:21'),
+(42, 2, 'Which CSS property sets opacity?', 'opacity', 'visibility', 'alpha', 'transparent', 'A', '2026-03-18 05:48:21'),
+(43, 2, 'Which HTML tag is inline element?', '<span>', '<div>', '<p>', '<section>', 'A', '2026-03-18 05:48:21'),
+(44, 2, 'Which CSS property sets z-index?', 'z-index', 'layer', 'index', 'depth', 'A', '2026-03-18 05:48:21'),
+(45, 2, 'Which HTML tag is used for checkbox?', '<input type=\"checkbox\">', '<checkbox>', '<check>', '<tick>', 'A', '2026-03-18 05:48:21'),
+(46, 2, 'Which CSS property sets flexbox?', 'flex', 'flexbox', 'display:flex', 'box-flex', 'C', '2026-03-18 05:48:21'),
+(47, 2, 'Which HTML tag is used for button?', '<button>', '<btn>', '<click>', '<input>', 'A', '2026-03-18 05:48:21'),
+(48, 2, 'Which CSS property is used for grid?', 'grid', 'display:grid', 'layout', 'grid-system', 'B', '2026-03-18 05:48:21'),
+(49, 2, 'Which HTML tag is used for title?', '<title>', '<head>', '<meta>', '<header>', 'A', '2026-03-18 05:48:21'),
+(50, 2, 'Which CSS property controls cursor?', 'cursor', 'pointer', 'mouse', 'hover', 'A', '2026-03-18 05:48:21'),
+(51, 2, 'Which HTML tag is used for iframe?', '<iframe>', '<frame>', '<embed>', '<object>', 'A', '2026-03-18 05:48:21'),
+(52, 2, 'Which CSS property controls shadow?', 'shadow', 'box-shadow', 'text-shadow', 'both', 'D', '2026-03-18 05:48:21'),
+(53, 2, 'Which HTML tag is used for audio?', '<audio>', '<sound>', '<music>', '<media>', 'A', '2026-03-18 05:48:21'),
+(54, 2, 'Which CSS property controls transition?', 'transition', 'animation', 'transform', 'change', 'A', '2026-03-18 05:48:21'),
+(55, 2, 'Which HTML tag is used for script?', '<script>', '<js>', '<code>', '<program>', 'A', '2026-03-18 05:48:21'),
+(56, 2, 'What will this HTML display?\n<h1>Hello</h1>', 'Big heading', 'Small text', 'Paragraph', 'Nothing', 'A', '2026-03-18 05:49:56'),
+(57, 2, 'What is output?\n<p>Hi</p>', 'Paragraph text', 'Heading', 'Link', 'Image', 'A', '2026-03-18 05:49:56'),
+(58, 2, 'What does this do?\n<a href=\"#\">Click</a>', 'Creates link', 'Creates button', 'Creates image', 'Nothing', 'A', '2026-03-18 05:49:56'),
+(59, 2, 'What will be shown?\n<img src=\"img.jpg\" alt=\"pic\">', 'Image', 'Text only', 'Error', 'Nothing', 'A', '2026-03-18 05:49:56'),
+(60, 2, 'What does CSS do?\np { color:red; }', 'Text red', 'Background red', 'Border red', 'Nothing', 'A', '2026-03-18 05:49:56'),
+(61, 2, 'Output?\n<div style=\"color:blue\">Hi</div>', 'Blue text', 'Red text', 'Green text', 'Black text', 'A', '2026-03-18 05:49:56'),
+(62, 2, 'What happens?\n<p style=\"font-size:20px\">Text</p>', 'Big text', 'Small text', 'Hidden', 'Italic', 'A', '2026-03-18 05:49:56'),
+(63, 2, 'What does this show?\n<ul><li>A</li></ul>', 'List', 'Paragraph', 'Table', 'Image', 'A', '2026-03-18 05:49:56'),
+(64, 2, 'Output?\n<ol><li>One</li></ol>', 'Number list', 'Bullet list', 'Table', 'Text', 'A', '2026-03-18 05:49:56'),
+(65, 2, 'What is result?\n<span>Hello</span>', 'Inline text', 'Block element', 'Image', 'Link', 'A', '2026-03-18 05:49:56'),
+(66, 2, 'What happens?\n<div>Hello</div>', 'Block element', 'Inline', 'Link', 'Image', 'A', '2026-03-18 05:49:56'),
+(67, 2, 'Output?\n<p><b>Hi</b></p>', 'Bold text', 'Italic text', 'Normal', 'Hidden', 'A', '2026-03-18 05:49:56'),
+(68, 2, 'What does this do?\n<p><i>Hi</i></p>', 'Italic text', 'Bold', 'Underline', 'Normal', 'A', '2026-03-18 05:49:56'),
+(69, 2, 'What will display?\n<p><u>Hi</u></p>', 'Underline text', 'Bold', 'Italic', 'None', 'A', '2026-03-18 05:49:56'),
+(70, 2, 'CSS effect?\np { background:red; }', 'Red background', 'Red text', 'Border red', 'Nothing', 'A', '2026-03-18 05:49:56'),
+(71, 2, 'What happens?\ndiv { width:100px; }', 'Set width', 'Set height', 'Set color', 'Nothing', 'A', '2026-03-18 05:49:56'),
+(72, 2, 'Output?\np { text-align:center; }', 'Center text', 'Left', 'Right', 'Hidden', 'A', '2026-03-18 05:49:56'),
+(73, 2, 'Result?\np { margin:10px; }', 'Space outside', 'Space inside', 'Border', 'None', 'A', '2026-03-18 05:49:56'),
+(74, 2, 'Result?\np { padding:10px; }', 'Space inside', 'Outside', 'Border', 'None', 'A', '2026-03-18 05:49:56'),
+(75, 2, 'What happens?\np { border:1px solid; }', 'Adds border', 'Adds color', 'Adds margin', 'None', 'A', '2026-03-18 05:49:56'),
+(76, 2, 'Output?\n<h1 style=\"color:green\">Hi</h1>', 'Green heading', 'Red heading', 'Blue', 'None', 'A', '2026-03-18 05:49:56'),
+(77, 2, 'What does this do?\n<input type=\"text\">', 'Text input', 'Button', 'Checkbox', 'None', 'A', '2026-03-18 05:49:56'),
+(78, 2, 'Output?\n<input type=\"checkbox\">', 'Checkbox', 'Button', 'Text', 'None', 'A', '2026-03-18 05:49:56'),
+(79, 2, 'Output?\n<button>Click</button>', 'Button', 'Link', 'Image', 'Text', 'A', '2026-03-18 05:49:56'),
+(80, 2, 'What happens?\n<form></form>', 'Creates form', 'Creates table', 'Creates div', 'None', 'A', '2026-03-18 05:49:56'),
+(81, 2, 'Output?\n<table><tr><td>A</td></tr></table>', 'Table', 'List', 'Div', 'Text', 'A', '2026-03-18 05:49:56'),
+(82, 2, 'CSS?\ndiv { display:none; }', 'Hide element', 'Show element', 'Color change', 'None', 'A', '2026-03-18 05:49:56'),
+(83, 2, 'CSS?\ndiv { display:block; }', 'Block element', 'Inline', 'Hidden', 'None', 'A', '2026-03-18 05:49:56'),
+(84, 2, 'CSS?\ndiv { display:inline; }', 'Inline element', 'Block', 'Hidden', 'None', 'A', '2026-03-18 05:49:56'),
+(85, 2, 'CSS?\ndiv { position:absolute; }', 'Absolute position', 'Relative', 'Static', 'None', 'A', '2026-03-18 05:49:56'),
+(86, 2, 'Output?\n<p style=\"color:red\">Hi</p>', 'Red text', 'Blue', 'Green', 'Black', 'A', '2026-03-18 05:49:56'),
+(87, 2, 'CSS?\np { font-weight:bold; }', 'Bold text', 'Italic', 'Underline', 'None', 'A', '2026-03-18 05:49:56'),
+(88, 2, 'CSS?\np { font-style:italic; }', 'Italic text', 'Bold', 'Underline', 'None', 'A', '2026-03-18 05:49:56'),
+(89, 2, 'CSS?\np { text-decoration:underline; }', 'Underline', 'Bold', 'Italic', 'None', 'A', '2026-03-18 05:49:56'),
+(90, 2, 'Output?\n<a href=\"google.com\">Go</a>', 'Link', 'Button', 'Image', 'Text', 'A', '2026-03-18 05:49:56'),
+(91, 2, 'CSS?\ndiv { background:yellow; }', 'Yellow background', 'Yellow text', 'Border', 'None', 'A', '2026-03-18 05:49:56'),
+(92, 2, 'CSS?\ndiv { height:100px; }', 'Set height', 'Set width', 'Color', 'None', 'A', '2026-03-18 05:49:56'),
+(93, 2, 'CSS?\ndiv { overflow:hidden; }', 'Hide overflow', 'Scroll', 'Show', 'None', 'A', '2026-03-18 05:49:56'),
+(94, 2, 'CSS?\ndiv { cursor:pointer; }', 'Pointer cursor', 'Text cursor', 'None', 'Default', 'A', '2026-03-18 05:49:56'),
+(95, 2, 'CSS?\ndiv { opacity:0.5; }', 'Half visible', 'Hidden', 'Full', 'None', 'A', '2026-03-18 05:49:56'),
+(96, 2, 'CSS?\ndiv { z-index:10; }', 'Layer order', 'Color', 'Size', 'None', 'A', '2026-03-18 05:49:56'),
+(97, 2, 'Output?\n<iframe src=\"a.html\"></iframe>', 'Embed page', 'Image', 'Text', 'None', 'A', '2026-03-18 05:49:56'),
+(98, 2, 'Output?\n<audio controls></audio>', 'Audio player', 'Video', 'Text', 'None', 'A', '2026-03-18 05:49:56'),
+(99, 2, 'Output?\n<video controls></video>', 'Video player', 'Audio', 'Text', 'None', 'A', '2026-03-18 05:49:56'),
+(100, 2, 'CSS?\ndiv { box-shadow:2px 2px; }', 'Shadow', 'Border', 'Color', 'None', 'A', '2026-03-18 05:49:56'),
+(101, 2, 'CSS?\ndiv { transition:1s; }', 'Animation', 'Color', 'Size', 'None', 'A', '2026-03-18 05:49:56'),
+(102, 2, 'CSS?\ndiv { transform:scale(2); }', 'Zoom', 'Rotate', 'Move', 'None', 'A', '2026-03-18 05:49:56'),
+(103, 2, 'CSS?\ndiv { display:flex; }', 'Flex layout', 'Grid', 'Inline', 'None', 'A', '2026-03-18 05:49:56'),
+(104, 2, 'CSS?\ndiv { display:grid; }', 'Grid layout', 'Flex', 'Inline', 'None', 'A', '2026-03-18 05:49:56'),
+(105, 2, 'Output?\n<p>Hello<br>World</p>', 'Line break', 'Single line', 'Bold', 'None', 'A', '2026-03-18 05:49:56'),
+(106, 2, 'What is output?\n<div style=\"width:100px;padding:10px;\">Box</div>', '120px', '100px', '110px', 'Depends on box-sizing', 'D', '2026-03-18 05:55:55'),
+(107, 2, 'What happens?\ndiv { display:inline; width:100px; }', 'Width ignored', 'Width applied', 'Error', 'Hidden', 'A', '2026-03-18 05:55:55'),
+(108, 2, 'Output?\n<p style=\"display:none\">Hi</p>', 'Hidden', 'Visible', 'Space remains', 'Error', 'A', '2026-03-18 05:55:55'),
+(109, 2, 'Output?\n<p style=\"visibility:hidden\">Hi</p>', 'Hidden with space', 'Removed', 'Visible', 'Error', 'A', '2026-03-18 05:55:55'),
+(110, 2, 'What happens?\ndiv { position:absolute; top:0; }', 'Moves top', 'Center', 'Bottom', 'No change', 'A', '2026-03-18 05:55:55'),
+(111, 2, 'Output?\ndiv { overflow:hidden; height:50px; }', 'Cuts content', 'Scroll', 'Expand', 'Error', 'A', '2026-03-18 05:55:55'),
+(112, 2, 'What happens?\ndiv { z-index:10; position:static; }', 'No effect', 'Applies', 'Hidden', 'Error', 'A', '2026-03-18 05:55:55'),
+(113, 2, 'Which wins?\np {color:red;} .c {color:blue;}', 'Depends usage', 'Red always', 'Blue always', 'Error', 'A', '2026-03-18 05:55:55'),
+(114, 2, 'Output?\n<p class=\"c\" style=\"color:green\">Hi</p>', 'Green', 'Blue', 'Red', 'Black', 'A', '2026-03-18 05:55:55'),
+(115, 2, 'What happens?\ndiv { float:left; }', 'Moves left', 'Center', 'Hidden', 'No effect', 'A', '2026-03-18 05:55:55'),
+(116, 2, 'Output?\ndiv { clear:left; }', 'Moves below float', 'Above', 'Hidden', 'Inline', 'A', '2026-03-18 05:55:55'),
+(117, 2, 'CSS?\ndiv { box-sizing:border-box; width:100px; padding:10px; }', 'Total 100px', '120px', '110px', 'Depends', 'A', '2026-03-18 05:55:55'),
+(118, 2, 'What happens?\ndiv:hover { color:red; }', 'Changes on hover', 'Always red', 'Hidden', 'Error', 'A', '2026-03-18 05:55:55'),
+(119, 2, 'Output?\np::first-letter { font-size:30px; }', 'First letter big', 'Whole text big', 'Hidden', 'None', 'A', '2026-03-18 05:55:55'),
+(120, 2, 'Output?\np::before { content:\"Hi \"; }', 'Adds before', 'Adds after', 'Replace', 'Error', 'A', '2026-03-18 05:55:55'),
+(121, 2, 'Output?\ndiv { display:flex; justify-content:center; }', 'Center horizontally', 'Vertical center', 'Hidden', 'None', 'A', '2026-03-18 05:55:55'),
+(122, 2, 'CSS?\ndiv { align-items:center; }', 'Vertical align (flex)', 'Horizontal', 'None', 'Error', 'A', '2026-03-18 05:55:55'),
+(123, 2, 'What happens?\ndiv { display:grid; grid-template-columns:1fr 1fr; }', '2 columns', '1 column', 'Hidden', 'Error', 'A', '2026-03-18 05:55:55'),
+(124, 2, 'Output?\ndiv { position:fixed; top:0; }', 'Fixed top', 'Scrolls', 'Bottom', 'Hidden', 'A', '2026-03-18 05:55:55'),
+(125, 2, 'Output?\ndiv { position:relative; top:10px; }', 'Moves down', 'Up', 'No change', 'Error', 'A', '2026-03-18 05:55:55'),
+(126, 2, 'Which has higher priority?\n#id vs .class', '#id', '.class', 'Equal', 'Depends', 'A', '2026-03-18 05:55:55'),
+(127, 2, 'Output?\n<p id=\"a\" class=\"b\" style=\"color:blue\">Hi</p>', 'Blue', 'ID', 'Class', 'Black', 'A', '2026-03-18 05:55:55'),
+(128, 2, 'What happens?\ndiv { overflow:auto; }', 'Scroll if needed', 'Always hidden', 'Expand', 'Error', 'A', '2026-03-18 05:55:55'),
+(129, 2, 'CSS?\ndiv { white-space:nowrap; }', 'No line break', 'Break lines', 'Hidden', 'Error', 'A', '2026-03-18 05:55:55'),
+(130, 2, 'Output?\np { line-height:2; }', 'Double space', 'Half', 'Normal', 'Hidden', 'A', '2026-03-18 05:55:55'),
+(131, 2, 'What happens?\ndiv { display:inline-block; }', 'Inline + block', 'Inline only', 'Block only', 'Hidden', 'A', '2026-03-18 05:55:55'),
+(132, 2, 'CSS?\ndiv { max-width:100px; }', 'Max width', 'Min width', 'Fixed', 'None', 'A', '2026-03-18 05:55:55'),
+(133, 2, 'CSS?\ndiv { min-width:100px; }', 'Min width', 'Max', 'Fixed', 'None', 'A', '2026-03-18 05:55:55'),
+(134, 2, 'Output?\ndiv { opacity:0; }', 'Invisible but exists', 'Removed', 'Visible', 'Error', 'A', '2026-03-18 05:55:55'),
+(135, 2, 'CSS?\ndiv { visibility:hidden; }', 'Hidden with space', 'Removed', 'Visible', 'Error', 'A', '2026-03-18 05:55:55'),
+(136, 2, 'Output?\ndiv { display:none; }', 'Removed', 'Hidden space', 'Visible', 'Error', 'A', '2026-03-18 05:55:55'),
+(137, 2, 'CSS?\ndiv { margin:10px; }', 'Outer space', 'Inner', 'Border', 'None', 'A', '2026-03-18 05:55:55'),
+(138, 2, 'CSS?\ndiv { padding:10px; }', 'Inner space', 'Outer', 'Border', 'None', 'A', '2026-03-18 05:55:55'),
+(139, 2, 'CSS?\ndiv { border:1px solid; }', 'Adds border', 'Adds margin', 'Adds padding', 'None', 'A', '2026-03-18 05:55:55'),
+(140, 2, 'CSS?\ndiv { width:50%; }', 'Half parent width', 'Half screen', 'Fixed', 'None', 'A', '2026-03-18 05:55:55'),
+(141, 2, 'CSS?\ndiv { height:100vh; }', 'Full viewport height', 'Parent height', 'Fixed', 'None', 'A', '2026-03-18 05:55:55'),
+(142, 2, 'CSS?\ndiv { text-align:center; }', 'Center text', 'Left', 'Right', 'None', 'A', '2026-03-18 05:55:55'),
+(143, 2, 'CSS?\ndiv { vertical-align:middle; }', 'Align inline', 'Block center', 'None', 'Error', 'A', '2026-03-18 05:55:55'),
+(144, 2, 'What happens?\nimg { max-width:100%; }', 'Responsive image', 'Fixed size', 'Hidden', 'Error', 'A', '2026-03-18 05:55:55'),
+(145, 2, 'CSS?\ndiv { overflow-x:hidden; }', 'Hide horizontal', 'Vertical', 'Scroll', 'None', 'A', '2026-03-18 05:55:55'),
+(146, 2, 'CSS?\ndiv { overflow-y:scroll; }', 'Vertical scroll', 'Horizontal', 'Hidden', 'None', 'A', '2026-03-18 05:55:55'),
+(147, 2, 'CSS?\ndiv { float:right; }', 'Moves right', 'Left', 'Center', 'None', 'A', '2026-03-18 05:55:55'),
+(148, 2, 'CSS?\ndiv { clear:both; }', 'Below floats', 'Above', 'Hidden', 'None', 'A', '2026-03-18 05:55:55'),
+(149, 2, 'CSS?\ndiv { position:sticky; top:0; }', 'Sticky top', 'Fixed', 'Relative', 'None', 'A', '2026-03-18 05:55:55'),
+(150, 2, 'CSS?\ndiv { left:10px; position:relative; }', 'Moves right', 'Left', 'No change', 'Error', 'A', '2026-03-18 05:55:55'),
+(151, 2, 'CSS?\ndiv { right:10px; position:absolute; }', 'Moves left', 'Right', 'No change', 'Error', 'A', '2026-03-18 05:55:55'),
+(152, 2, 'CSS?\ndiv { top:10px; position:fixed; }', 'Moves down fixed', 'Up', 'Scroll', 'None', 'A', '2026-03-18 05:55:55'),
+(153, 2, 'CSS?\ndiv { bottom:0; position:fixed; }', 'Bottom fixed', 'Top', 'Scroll', 'None', 'A', '2026-03-18 05:55:55'),
+(154, 2, 'CSS?\ndiv { text-overflow:ellipsis; }', 'Adds ...', 'Cuts text', 'Wrap', 'None', 'A', '2026-03-18 05:55:55'),
+(155, 2, 'CSS?\ndiv { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }', 'Ellipsis works', 'No effect', 'Wrap', 'Error', 'A', '2026-03-18 05:55:55');
 
 -- --------------------------------------------------------
 
@@ -218,14 +374,6 @@ CREATE TABLE `exam_results` (
   `score_percentage` decimal(5,2) NOT NULL,
   `exam_date` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `exam_results`
---
-
-INSERT INTO `exam_results` (`result_id`, `sid`, `subject_id`, `total_questions`, `correct_answers`, `score_percentage`, `exam_date`) VALUES
-(1, 25, 1, 3, 1, 33.33, '2026-03-14 05:34:50'),
-(3, 25, 2, 2, 2, 100.00, '2026-03-14 09:11:38');
 
 -- --------------------------------------------------------
 
@@ -248,6 +396,24 @@ INSERT INTO `intern` (`iid`, `unic_no`, `duration`, `sr_no`) VALUES
 (1, 'INT-45', '45 Days', 1),
 (2, 'INT-90', '3 Months', 2),
 (3, 'INT-180', '6 Months', 3);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ip_settings`
+--
+
+CREATE TABLE `ip_settings` (
+  `id` int(11) NOT NULL,
+  `allowed_ip` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `ip_settings`
+--
+
+INSERT INTO `ip_settings` (`id`, `allowed_ip`) VALUES
+(1, '::1');
 
 -- --------------------------------------------------------
 
@@ -275,8 +441,7 @@ CREATE TABLE `student` (
 --
 
 INSERT INTO `student` (`sid`, `full_name`, `email`, `phone`, `address`, `college_name`, `branch`, `collage_course`, `year`, `user_img`, `resume`, `submitted_at`) VALUES
-(25, 'DNYANESHWAR SHARAD TIDME', 'dnyaneshwartidme@gmail.com', '09307152817', 'A.T.POST. ROHILE', 'Sandip Univarsity', 'Computer Science', 'B.E', 'Passed Out', 'dnyaneshwar_sharad_tidme_1773235267011.jpg', 'dnyaneshwar_sharad_tidme_1773235267012.pdf', '2026-03-11 13:21:07'),
-(26, 'yogesh surywanshi ', 'ysury@gmail.com', '9359652403', 'NSK', 'kthn', 'Computer Science', 'MSc', 'Passed Out', 'yogesh_surywanshi__1773391204037.jpg', NULL, '2026-03-13 08:40:04');
+(27, 'DNYANESHWAR SHARAD TIDME', 'dnyaneshwartidme@gmail.com', '09307152817', 'A.T.POST. ROHILE', 'R.Y.K College', 'Computer Science', 'BCA', 'Passed Out', 'dnyaneshwar_sharad_tidme_1773803663488.jpg', NULL, '2026-03-18 03:14:23');
 
 -- --------------------------------------------------------
 
@@ -298,8 +463,7 @@ CREATE TABLE `student_auth` (
 --
 
 INSERT INTO `student_auth` (`said`, `sid`, `face_descriptor`, `pin`, `status`, `created_at`) VALUES
-(25, 25, '[-0.1412288248538971,0.1553346961736679,0.08487416058778763,-0.06848162412643433,-0.034471236169338226,-0.022743195295333862,-0.04068075865507126,-0.11475934088230133,0.1284448504447937,-0.09415904432535172,0.3041360676288605,0.02245737984776497,-0.16119667887687683,-0.2539190948009491,0.0479460209608078,0.10843589156866074,-0.08562871068716049,-0.18553324043750763,-0.12774112820625305,-0.08819788694381714,-0.023542126640677452,-0.006251238752156496,0.07462175190448761,0.011775780469179153,-0.1733093112707138,-0.4490302503108978,-0.06457220017910004,-0.0780036523938179,0.0882905125617981,-0.09217289835214615,-0.03574475273489952,0.026629500091075897,-0.2455991506576538,-0.08054351061582565,-0.017002591863274574,0.15871919691562653,-0.012727700173854828,-0.004046758636832237,0.1676228642463684,-0.006043676286935806,-0.16970179975032806,0.011521697975695133,0.040913406759500504,0.260577917098999,0.21721450984477997,0.03872064873576164,0.10564371943473816,-0.07343868166208267,0.09587686508893967,-0.14914433658123016,0.10445278137922287,0.11661789566278458,0.0779956802725792,0.0432504303753376,0.052156299352645874,-0.10853015631437302,-0.008805206045508385,0.11174933612346649,-0.17244790494441986,0.05319400131702423,-0.0007914761081337929,-0.09571632742881775,-0.1068301722407341,0.007516459561884403,0.2584483027458191,0.13090722262859344,-0.07813166081905365,-0.1923544704914093,0.19459256529808044,-0.16551770269870758,-0.02780441753566265,0.08097976446151733,-0.1001865342259407,-0.10543672740459442,-0.3290623128414154,0.10382836312055588,0.3844422698020935,0.1068371832370758,-0.20572485029697418,0.06086846813559532,-0.09962042421102524,-0.029331009835004807,0.06712662428617477,0.09694558382034302,-0.11148348450660706,0.05138653889298439,-0.13604828715324402,0.028147170320153236,0.23423101007938385,0.049873143434524536,-0.0420585498213768,0.21988728642463684,0.01521166693419218,0.07808340340852737,0.0879165455698967,0.024643857032060623,-0.1396215856075287,-0.012890883721411228,-0.12911827862262726,-0.07389315962791443,0.09097870439291,-0.06146704778075218,0.004231923725455999,0.10233324021100998,-0.15603917837142944,0.15948668122291565,-0.01541848573833704,0.0397256575524807,0.058550190180540085,0.03183681145310402,-0.027893375605344772,-0.14962448179721832,0.10523714870214462,-0.21025951206684113,0.19154812395572662,0.19117800891399384,0.06110917776823044,0.16294436156749725,0.18411780893802643,0.08155907690525055,0.03141846880316734,0.01130472868680954,-0.11930608749389648,-0.019427675753831863,0.025037894025444984,-0.06223079562187195,0.10048782825469971,0.052886489778757095]', 756700, 'ACTIVE', '2026-03-11 13:21:28'),
-(26, 26, '[-0.13873669505119324,0.0214273389428854,0.0756811797618866,-0.027813833206892014,-0.02329045534133911,-0.00928073562681675,-0.012670731171965599,-0.04670262336730957,0.18221065402030945,-0.07330948859453201,0.23018957674503326,-0.010383226908743382,-0.1773674488067627,-0.19720259308815002,0.0038580060936510563,0.12507925927639008,-0.19766578078269958,-0.10494038462638855,-0.0397941879928112,-0.14047186076641083,-0.040185507386922836,0.05608391761779785,0.04891848564147949,0.0674755722284317,-0.08933353424072266,-0.435253381729126,-0.04930906742811203,-0.18792292475700378,0.0022073842119425535,-0.08949983865022659,-0.014345360919833183,0.04159341752529144,-0.19453835487365723,-0.06683816760778427,-0.04601556807756424,0.10399866104125977,0.023262498900294304,0.008141560479998589,0.14377780258655548,0.06249332055449486,-0.06539841741323471,-0.09858638048171997,-0.007851377129554749,0.2973475158214569,0.16087426245212555,0.07020267844200134,-0.020535744726657867,0.0668928325176239,0.0959131270647049,-0.2517063617706299,0.054191671311855316,0.08924505114555359,0.148490771651268,-0.014201786369085312,0.07962260395288467,-0.05907105654478073,-0.03843194991350174,0.0006075206911191344,-0.16705526411533356,0.009168175049126148,-0.0045014433562755585,-0.07884856313467026,-0.1001935824751854,-0.04204355552792549,0.2858135402202606,0.10249222815036774,-0.06885281950235367,-0.08993862569332123,0.14921458065509796,-0.12316813319921494,-0.03888234123587608,0.03771312162280083,-0.08816967159509659,-0.09970516711473465,-0.25909852981567383,0.10100030153989792,0.40532875061035156,0.07330219447612762,-0.15081173181533813,-0.005946697201579809,-0.1676468551158905,-0.02338103950023651,0.03851437568664551,-0.018368149176239967,-0.046528927981853485,0.018445385619997978,-0.10185502469539642,0.02797025255858898,0.1040407344698906,-0.01870821602642536,-0.047132354229688644,0.13402588665485382,-0.05734929442405701,0.05570687726140022,0.028449999168515205,-0.05895832180976868,-0.03959943726658821,0.0789959505200386,-0.08364906907081604,0.016397519037127495,0.09969408065080643,-0.03408227860927582,0.0375710055232048,0.004050458315759897,-0.18708167970180511,0.08298809826374054,0.02394537255167961,-0.07436113804578781,0.09330680966377258,0.03910050541162491,-0.19915759563446045,-0.09256959706544876,0.18203981220722198,-0.2875390946865082,0.16813787817955017,0.1660432517528534,-0.001967574004083872,0.20488815009593964,0.0008302194182761014,0.0834570899605751,-0.05951768159866333,-0.02739199809730053,-0.12148122489452362,-0.0699816644191742,0.07063499093055725,-0.023677531629800797,0.015138871967792511,0.015386831015348434]', 222076, 'ACTIVE', '2026-03-13 08:40:35');
+(27, 27, '[-0.1292785257101059,0.05653812363743782,-0.015458976849913597,-0.08726799488067627,-0.06495968252420425,0.024001190438866615,-0.030978599563241005,-0.10545552521944046,0.15653714537620544,-0.1762057989835739,0.3003866374492645,0.035370804369449615,-0.19001415371894836,-0.20214010775089264,0.047721583396196365,0.08010527491569519,-0.06101646274328232,-0.1541687399148941,-0.06396052241325378,-0.13122676312923431,-0.03192630410194397,-0.05035386607050896,0.052711233496665955,0.041838131844997406,-0.15922203660011292,-0.41255900263786316,-0.1121399775147438,-0.06813935190439224,0.08018174767494202,-0.10717728734016418,-0.009048478677868843,0.028762061148881912,-0.2375761717557907,-0.06382258236408234,-0.03463117778301239,0.15856538712978363,-0.02821161225438118,0.020807767286896706,0.1639537662267685,0.009915093891322613,-0.12436845153570175,-0.034630805253982544,0.020952468737959862,0.2722168564796448,0.15887442231178284,0.03406078368425369,0.06286458671092987,-0.0005081421113573015,0.04144000634551048,-0.21358302235603333,0.10928936302661896,0.07252869009971619,0.13964803516864777,0.01774659939110279,0.04544345289468765,-0.12604163587093353,-0.04070168733596802,0.11910973489284515,-0.1199476420879364,0.046859435737133026,-0.012509364634752274,-0.06616061925888062,-0.12278225272893906,-0.006164040416479111,0.29994064569473267,0.16561219096183777,-0.10533671826124191,-0.15353552997112274,0.2495780885219574,-0.1426648497581482,-0.02013779804110527,0.04492758959531784,-0.08961725234985352,-0.14762520790100098,-0.26542213559150696,0.1527223289012909,0.3793303966522217,0.16950644552707672,-0.16708743572235107,0.038411565124988556,-0.11488087475299835,0.012904117815196514,0.031488679349422455,0.03994683548808098,-0.08548007905483246,0.021132225170731544,-0.09247878193855286,0.05676817521452904,0.16429086029529572,0.026262111961841583,-0.049547452479600906,0.18432679772377014,0.0013890499249100685,0.12228351086378098,0.07100141793489456,0.018577592447400093,-0.11809294670820236,0.0038696848787367344,-0.15411396324634552,-0.022180721163749695,0.07092595845460892,-0.06086970865726471,0.04215867444872856,0.1302768737077713,-0.15870822966098785,0.19810383021831512,-0.0153995081782341,-0.029573282226920128,0.06205384060740471,0.10448486357927322,-0.06366743892431259,-0.1179187148809433,0.09172319620847702,-0.2714793384075165,0.18325482308864594,0.20739877223968506,0.06387031078338623,0.20585666596889496,0.16409343481063843,0.06947261840105057,0.07725773006677628,-0.014270416460931301,-0.17704050242900848,-0.04715569317340851,-0.006513063330203295,-0.09104392677545547,0.02281489595770836,0.053081661462783813]', 466448, 'ACTIVE', '2026-03-18 03:15:04');
 
 -- --------------------------------------------------------
 
@@ -359,6 +523,12 @@ ALTER TABLE `course`
   ADD UNIQUE KEY `course_id` (`course_id`);
 
 --
+-- Indexes for table `email_settings`
+--
+ALTER TABLE `email_settings`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `enrollment`
 --
 ALTER TABLE `enrollment`
@@ -388,6 +558,12 @@ ALTER TABLE `exam_results`
 ALTER TABLE `intern`
   ADD PRIMARY KEY (`iid`),
   ADD UNIQUE KEY `unic_no` (`unic_no`);
+
+--
+-- Indexes for table `ip_settings`
+--
+ALTER TABLE `ip_settings`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `student`
@@ -420,13 +596,13 @@ ALTER TABLE `subjects`
 -- AUTO_INCREMENT for table `admin_users`
 --
 ALTER TABLE `admin_users`
-  MODIFY `aid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `aid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT for table `attendance_log`
 --
 ALTER TABLE `attendance_log`
-  MODIFY `log_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `log_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT for table `branch_and_degree`
@@ -441,16 +617,22 @@ ALTER TABLE `course`
   MODIFY `cid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT for table `email_settings`
+--
+ALTER TABLE `email_settings`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `enrollment`
 --
 ALTER TABLE `enrollment`
-  MODIFY `eid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `eid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `exam_questions`
 --
 ALTER TABLE `exam_questions`
-  MODIFY `qid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `qid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=156;
 
 --
 -- AUTO_INCREMENT for table `exam_results`
@@ -468,13 +650,13 @@ ALTER TABLE `intern`
 -- AUTO_INCREMENT for table `student`
 --
 ALTER TABLE `student`
-  MODIFY `sid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `sid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `student_auth`
 --
 ALTER TABLE `student_auth`
-  MODIFY `said` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `said` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `subjects`
