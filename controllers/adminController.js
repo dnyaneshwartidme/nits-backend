@@ -88,23 +88,27 @@ export const approveStudent = (req, res) => {
                     const excelFileName = `${month}_${year}.xlsx`;
                     Db.query("UPDATE enrollment SET exal_file = ? WHERE sid = ?", [excelFileName, studentId]);
 
-                    // --- SEND EMAIL NOTIFICATION ---
+                    // --- SEND RESPONSE IMMEDIATELY ---
+                    res.json({ message: "Student Approved & Excel Updated!", pin: pin });
+
+                    // --- SEND EMAIL IN BACKGROUND (non-blocking) ---
                     const emailQuery = "SELECT smtp_email, smtp_password FROM email_settings WHERE id = 1 AND smtp_email != '' AND smtp_password != ''";
                     Db.query(emailQuery, (emailErr, emailRes) => {
                         if (emailErr || emailRes.length === 0) {
-                            return res.json({ message: "Student Approved & Excel Updated! (Email config missing, so no email sent)", pin: pin });
+                            console.log('Email skipped: Email config missing or DB error.');
+                            return;
                         }
 
                         const { smtp_email, smtp_password } = emailRes[0];
-                        const studentEmail = studentData.email; // we need to make sure we queried email earlier
+                        const studentEmail = studentData.email;
 
                         if (!studentEmail) {
-                             return res.json({ message: "Student Approved & Excel Updated! (Student has no email address)", pin: pin });
+                            console.log('Email skipped: Student has no email address.');
+                            return;
                         }
 
-                        // Set up Nodemailer
                         const transporter = nodemailer.createTransport({
-                            service: 'gmail', // Assuming gmail based on the frontend instructions
+                            service: 'gmail',
                             auth: {
                                 user: smtp_email,
                                 pass: smtp_password
@@ -159,11 +163,9 @@ export const approveStudent = (req, res) => {
 
                         transporter.sendMail(mailOptions, (error, info) => {
                             if (error) {
-                                console.error('Error sending approval email:', error);
-                                return res.json({ message: "Student Approved, but failed to send email notification.", pin: pin });
+                                console.error('❌ Background email FAILED:', error.message);
                             } else {
-                                console.log('Email sent: ' + info.response);
-                                return res.json({ message: "Student Approved! Success email sent to student.", pin: pin });
+                                console.log('✅ Background email SENT successfully:', info.response);
                             }
                         });
                     });
